@@ -15,7 +15,7 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
     if (typeof window !== "undefined") {
       const savedToken = localStorage.getItem("userToken");
       if (savedToken) {
-        // الـ setTimeout دي هي السر اللي هيشيل الخط الأحمر
+        // 
         setTimeout(() => {
           setUserToken(savedToken);
         }, 0);
