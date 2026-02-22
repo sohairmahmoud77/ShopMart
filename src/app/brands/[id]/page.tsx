@@ -8,7 +8,7 @@ import { Loader2, LayoutGrid } from "lucide-react";
 export default function BrandDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
 
-  // جلب المنتجات المفلترة بالبراند
+  // 
   const { data: products, isLoading } = useQuery({
     queryKey: ["brandProducts", id],
     queryFn: async () => {

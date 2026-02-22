@@ -14,23 +14,23 @@ export default function ChangePasswordPage() {
   const [formData, setFormData] = useState({
     currentPassword: "",
     password: "",
-    rePassword: "", // يفضل إضافة هذا الحقل لأن معظم الـ APIs تطلبه للتأكيد
+    rePassword: "", 
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      // ✅ التعديل الجوهري: نرسل كائن واحد (Object) بدلاً من قيم منفصلة
+      // 
       await updatePassword({
         currentPassword: formData.currentPassword,
         password: formData.password,
-        rePassword: formData.password // في حال كان الـ API يتطلب rePassword نرسله هنا
+        rePassword: formData.password 
       });
 
       toast.success("Password updated successfully! Please login again 🚀");
       
-      // ننتظر قليلاً ثم نقوم بتسجيل الخروج لإجبار المستخدم على تجديد التوكن
+      //
       setTimeout(() => {
         logout();
       }, 2000);

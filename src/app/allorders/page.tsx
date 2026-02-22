@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 export default function AllOrdersPage() {
   const [userId, setUserId] = useState<string | null>(null);
 
-  // 1. الإصلاح الأهم: استخراج الـ User ID بعد التأكد من وجود المتصفح
+  //
   useEffect(() => {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("userToken");
@@ -25,7 +25,7 @@ export default function AllOrdersPage() {
     }
   }, []);
 
-  // 2. جلب الطلبات (تعمل فقط عندما يتوفر userId)
+  // 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["allOrders", userId],
     queryFn: async () => {
@@ -33,10 +33,10 @@ export default function AllOrdersPage() {
       const res = await axios.get(`https://ecommerce.routemisr.com/api/v1/orders/user/${userId}`);
       return res.data;
     },
-    enabled: !!userId, // يمنع التنفيذ إذا كان الـ ID غير موجود
+    enabled: !!userId, 
   });
 
-  // حالة التحميل
+  // 
   if (isLoading || (!userId && !isError)) return (
     <div className="flex flex-col justify-center items-center h-screen bg-white gap-4">
       <Loader2 className="animate-spin text-blue-600" size={50} strokeWidth={1} />
@@ -44,7 +44,7 @@ export default function AllOrdersPage() {
     </div>
   );
 
-  // حالة عدم وجود طلبات
+  // 
   if (!data || data.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-40 bg-white min-h-screen text-center px-6">

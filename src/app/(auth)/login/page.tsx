@@ -84,7 +84,7 @@ export default function LoginPage() {
               />
             </div>
             
-            {/* التعديل هنا: الروابط المساعدة بشكل احترافي */}
+            {/* *****/}
             <div className="flex justify-between items-center mt-3 px-1">
               <Link 
                 href="/forgot-password" 

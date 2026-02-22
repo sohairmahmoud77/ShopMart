@@ -46,7 +46,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       return data; 
     } catch (error: any) {
-      // لو السلة فاضية الـ API ساعات بيرجع 404، لازم نعالجها عشان React Query ميعلقش
+      // 
       if (error.response?.status === 404) {
         setCartData(null);
         setNumOfCartItems(0);
@@ -133,7 +133,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // 6. الدفع
+  // 
   const checkOut = async (cartId: string, shippingAddress: any) => {
     try {
       const { data } = await axiosInstance.post(

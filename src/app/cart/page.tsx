@@ -93,12 +93,12 @@ export default function CartPage() {
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Products List */}
+          {/* *********** */}
           <div className="lg:col-span-8 space-y-6">
             {cartData.products.map((item: any) => (
               <div key={item.product._id} className="group relative flex flex-col sm:flex-row items-center gap-8 bg-white p-6 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.02)] border border-white transition-all hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] hover:-translate-y-1 overflow-hidden">
                 
-                {/* Image Section - Vibrant & Glowing */}
+                {/* ****** */}
                 <div className="relative w-56 h-56 shrink-0 rounded-[2rem] overflow-hidden bg-gradient-to-br from-slate-50 to-white group-hover:from-blue-50 transition-colors duration-500">
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle,rgba(59,130,246,0.1)_0%,transparent_70%)]"></div>
                   <Image 
@@ -109,7 +109,7 @@ export default function CartPage() {
                   />
                 </div>
 
-                {/* Details Section */}
+                {/* ***** */}
                 <div className="flex-grow w-full py-4 px-2">
                   <div className="flex justify-between items-start mb-6">
                     <div>
@@ -127,7 +127,7 @@ export default function CartPage() {
                        <p className="text-3xl font-black text-black tracking-tighter italic leading-none">{item.price} <span className="text-[10px] not-italic text-slate-400 font-bold uppercase tracking-widest ml-1">EGP</span></p>
                     </div>
                     
-                    {/* Modern Counter */}
+                    {/* **** */}
                     <div className="flex items-center gap-4 bg-slate-900 text-white p-2 rounded-2xl shadow-xl">
                       <button 
                         onClick={() => updateMutation.mutate({ id: item.product._id, count: item.count - 1 })}
@@ -150,7 +150,7 @@ export default function CartPage() {
             ))}
           </div>
 
-          {/* Checkout Summary - High Contrast */}
+          {/* ***** */}
           <div className="lg:col-span-4 lg:sticky lg:top-10 h-fit">
             <div className="bg-white p-10 rounded-[3.5rem] shadow-[0_50px_100px_rgba(0,0,0,0.04)] border border-white">
               <h2 className="text-3xl font-black mb-10 tracking-tighter uppercase italic text-slate-900 border-b border-slate-50 pb-6">Summary</h2>

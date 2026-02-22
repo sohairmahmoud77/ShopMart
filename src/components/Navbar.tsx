@@ -43,13 +43,13 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-100 z-[100]">
       <div className="container mx-auto px-6 h-20 flex items-center justify-between">
         
-        {/* Logo Section */}
+        {/* ****/}
         <Link href="/" className="flex items-center gap-2 group shrink-0">
            <div className="bg-black text-white w-9 h-9 flex items-center justify-center font-bold rounded-lg text-xl transition-transform group-hover:rotate-12">S</div>
            <span className="text-2xl font-black tracking-tighter">ShopMart</span>
         </Link>
 
-        {/* Middle Links */}
+        {/* **** */}
         <div className="hidden md:flex items-center gap-8">
           {[
             { name: "Products", href: "/products" },
@@ -68,7 +68,7 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Right Section */}
+        {/* ***** */}
         <div className="flex items-center gap-6">
           <Link href="/cart" className="relative p-2 text-gray-700 hover:text-black transition-colors">
             <ShoppingBag size={24} strokeWidth={1.5} />

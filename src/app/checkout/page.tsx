@@ -14,7 +14,7 @@ export default function CheckoutPage() {
     city: "",
   });
 
-  // جلب بيانات السلة للحصول على الـ ID
+  // 
   const { data: cartResponse } = useQuery({
     queryKey: ["cart"],
     queryFn: getLoggedUserCart,
@@ -22,7 +22,7 @@ export default function CheckoutPage() {
 
   const cartId = cartResponse?.data?._id;
 
-  // 1. الدفع كاش (Cash Order)
+  // 
   const cashMutation = useMutation({
     mutationFn: (values: typeof shippingAddress) => 
       fetch(`https://ecommerce.routemisr.com/api/v1/orders/${cartId}`, {
@@ -33,12 +33,12 @@ export default function CheckoutPage() {
     onSuccess: (data) => {
       if (data.status === "success") {
         toast.success("Order Placed Successfully (Cash)");
-        window.location.href = "/allorders"; // تحويل لصفحة الطلبات
+        window.location.href = "/allorders"; 
       }
     }
   });
 
-  // 2. الدفع أونلاين (Online Payment - Stripe)
+  //
   const onlineMutation = useMutation({
     mutationFn: (values: typeof shippingAddress) =>
       fetch(`https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=http://localhost:3000`, {
@@ -49,7 +49,7 @@ export default function CheckoutPage() {
     onSuccess: (data) => {
       if (data.status === "success") {
         toast.loading("Redirecting to Stripe...");
-        window.location.href = data.session.url; // التحويل لصفحة فيزا
+        window.location.href = data.session.url; 
       }
     }
   });
@@ -71,7 +71,7 @@ export default function CheckoutPage() {
     <div className="container mx-auto px-6 py-20 min-h-screen bg-[#fcfcfc]">
       <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
         
-        {/* Left: Shipping Form */}
+        {/* ***** */}
         <div className="space-y-10">
           <div>
             <h1 className="text-5xl font-black tracking-tighter uppercase italic">Shipping</h1>
@@ -106,7 +106,7 @@ export default function CheckoutPage() {
               />
             </div>
 
-            {/* Payment Selection */}
+            {/* ***** */}
             <div className="grid grid-cols-2 gap-4 pt-6">
               <button 
                 type="button"
@@ -137,7 +137,7 @@ export default function CheckoutPage() {
           </form>
         </div>
 
-        {/* Right: Order Summary Preview */}
+        {/* ****** */}
         <div className="bg-white p-10 rounded-[3rem] border border-gray-50 shadow-2xl shadow-gray-200/50 lg:sticky lg:top-20">
           <h2 className="text-2xl font-black mb-8 italic uppercase tracking-tighter">Order Review</h2>
           <div className="space-y-4">
