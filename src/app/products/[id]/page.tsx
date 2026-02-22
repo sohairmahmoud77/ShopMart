@@ -1,16 +1,16 @@
 "use client";
-import React from "react";
-import { useParams } from "next/navigation";
+import React, { use } from "react";
+import Image from "next/image";
+import { useCart } from "@/context/cart.context"; 
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/core/axios.config";
-import { Star, ShoppingCart, Loader2 } from "lucide-react"; 
-import { useCart } from "@/context/CartContext"; 
+import { Loader2, ShoppingCart, Star, CheckCircle2 } from "lucide-react";
 
-export default function ProductDetails() {
-  const { id } = useParams();
-  const { addToCart } = useCart(); 
+export default function ProductDetails({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const { addToCart } = useCart();
 
-  const { data, isLoading } = useQuery({
+  const { data: product, isLoading } = useQuery({
     queryKey: ["productDetails", id],
     queryFn: async () => {
       const { data } = await axiosInstance.get(`/api/v1/products/${id}`);
@@ -18,52 +18,76 @@ export default function ProductDetails() {
     },
   });
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin text-blue-600" size={40} />
-      </div>
-    );
-  }
+  if (isLoading) return (
+    <div className="h-screen flex items-center justify-center bg-white">
+      <Loader2 className="animate-spin text-black" size={40} />
+    </div>
+  );
 
   return (
-    <div className="container mx-auto px-4 py-10">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+    <div className="container mx-auto px-6 py-16 min-h-screen bg-white">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
         
-        {/* ****/}
-        <div className="rounded-xl overflow-hidden bg-gray-50 flex items-center justify-center p-4">
-          <img 
-            src={data?.imageCover} 
-            alt={data?.title} 
-            className="w-full max-h-[500px] object-contain hover:scale-105 transition-transform duration-300" 
-          />
-        </div>
-
-        {/* ****/}
-        <div className="flex flex-col justify-center">
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">{data?.title}</h1>
-          <p className="text-gray-600 mb-6 leading-relaxed">{data?.description}</p>
-          
-          <div className="flex items-center gap-4 mb-8">
-            <span className="text-3xl font-bold text-blue-600">{data?.price} EGP</span>
-            <div className="flex items-center text-yellow-500 bg-yellow-50 px-3 py-1 rounded-full border border-yellow-100">
-              <Star size={18} fill="currentColor" />
-              <span className="ml-1 font-bold">{data?.ratingsAverage}</span>
+        {/* القسم الأيسر: الصور */}
+        <div className="space-y-4 sticky top-24">
+          <div className="bg-[#f9f9f9] rounded-[2.5rem] p-8 border border-gray-50 flex items-center justify-center overflow-hidden">
+            <div className="relative w-full aspect-square">
+              <Image 
+                src={product.imageCover} 
+                alt={product.title} 
+                fill
+                priority
+                className="object-contain hover:scale-105 transition-transform duration-500"
+              />
             </div>
           </div>
+          {/* عرض الصور الفرعية إن وجدت */}
+          <div className="grid grid-cols-4 gap-4">
+            {product.images?.map((img: string, idx: number) => (
+              <div key={idx} className="bg-gray-50 rounded-2xl p-2 border border-gray-100 aspect-square relative overflow-hidden">
+                <Image src={img} alt="gallery" fill className="object-contain p-2" />
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {/********/}
-          <button 
-            onClick={() => addToCart(data?._id)} 
-            className="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-100"
-          >
-            <ShoppingCart size={20} />
-            Add to Cart
-          </button>
-          
-          <p className="mt-4 text-sm text-gray-400 text-center italic">
-            Free delivery on orders over 1000 EGP
+        {/* القسم الأيمن: البيانات */}
+        <div className="pt-4">
+          <div className="flex items-center gap-2 text-blue-600 font-bold text-sm mb-4 uppercase tracking-widest">
+            <CheckCircle2 size={16} />
+            <span>{product.category?.name}</span>
+            <span className="text-gray-300 mx-2">/</span>
+            <span className="text-gray-500">{product.brand?.name}</span>
+          </div>
+
+          <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-6 leading-[1.1]">
+            {product.title}
+          </h1>
+
+          <div className="flex items-center gap-6 mb-10">
+            <div className="flex items-center gap-2 bg-yellow-400/10 px-4 py-2 rounded-full border border-yellow-400/20">
+              <Star className="text-yellow-500 fill-yellow-500" size={18} />
+              <span className="font-bold text-yellow-700">{product.ratingsAverage}</span>
+            </div>
+            <span className="text-gray-400 font-medium">{product.ratingsQuantity} Global Ratings</span>
+          </div>
+
+          <p className="text-gray-500 text-lg leading-relaxed mb-10 max-w-xl">
+            {product.description}
           </p>
+
+          <div className="flex items-center gap-3 mb-12">
+            <span className="text-5xl font-black text-black tracking-tighter">{product.price}</span>
+            <span className="text-2xl font-bold text-gray-400 uppercase">EGP</span>
+          </div>
+
+          <button 
+            onClick={() => addToCart(product._id)}
+            className="group w-full max-w-md bg-black text-white py-6 rounded-3xl font-black text-xl flex items-center justify-center gap-4 hover:bg-gray-800 transition-all active:scale-95 shadow-2xl shadow-gray-200"
+          >
+            <ShoppingCart size={24} className="group-hover:translate-x-1 transition-transform" />
+            Add to Shopping Bag
+          </button>
         </div>
       </div>
     </div>

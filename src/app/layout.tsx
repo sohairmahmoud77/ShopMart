@@ -1,5 +1,5 @@
 import { UserContextProvider } from "@/context/UserContext";
-import { CartProvider } from "@/context/CartContext";
+import { CartProvider } from "@/context/cart.context";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import QueryProvider from "@/providers/QueryProvider";

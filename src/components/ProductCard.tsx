@@ -1,72 +1,97 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { Star, ShoppingCart, Heart } from "lucide-react";
-import { useCart } from "@/context/CartContext"; 
+import { ShoppingCart, Star, Heart } from "lucide-react";
+import { Product } from "@/interfaces/product.interface";
+import { useCart } from "@/context/cart.context"; 
 
-interface IProduct {
-  id: string;
-  _id?: string; 
-  title: string;
-  imageCover: string;
-  price: number;
-  ratingsAverage: number;
-  category: { name: string };
-}
-
-export default function ProductCard({ product }: { product: IProduct }) {
-  // *****
+export default function ProductCard({ product }: { product: Product }) {
+  // 
   const { addToCart } = useCart();
 
-  //***** */
-  const productId = product.id || product._id;
+  //
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault(); 
+    await addToCart(product._id); 
+  };
+
+ 
+  const handleAddToWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log("Added to wishlist:", product._id);
+   
+  };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-xl transition-all duration-300 flex flex-col h-full border border-gray-100 relative">
+    <div className="group bg-white border border-gray-200 rounded-2xl p-4 transition-all duration-300 hover:shadow-lg relative flex flex-col h-full">
       
-      {/* Wishlist Button */}
-      <button className="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur-sm rounded-full shadow-sm hover:text-red-500 transition-colors z-10">
-        <Heart size={18} />
-      </button>
-
-      <Link href={`/products/${productId}`} className="flex flex-col h-full">
-        <div className="relative h-48 w-full bg-gray-50 p-4">
-          <img
+      <Link href={`/products/${product._id}`} className="flex flex-col h-full">
+        
+        {/* *****/}
+        <div className="relative w-full aspect-square mb-4 overflow-hidden rounded-xl bg-[#f9f9f9]">
+          <Image
             src={product.imageCover}
             alt={product.title}
-            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-contain p-6 group-hover:scale-105 transition-transform duration-500"
           />
         </div>
-        
-        <div className="p-3 flex flex-col flex-grow">
-          <p className="text-blue-600 text-[10px] font-bold uppercase tracking-wider">
-            {product.category?.name}
-          </p>
-          <h3 className="font-semibold text-gray-800 text-sm line-clamp-1 mt-1">
+
+        {/* */}
+        <div className="flex flex-col flex-grow">
+          <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">
+            {product.category?.name || "General"}
+          </span>
+
+          <h3 className="text-gray-800 font-bold text-sm leading-tight mb-2 line-clamp-2 h-10 group-hover:text-blue-600 transition-colors">
             {product.title}
           </h3>
-          
-          <div className="flex justify-between items-center mt-auto pt-3">
-            <span className="text-base font-bold text-gray-900">{product.price} EGP</span>
-            <div className="flex items-center text-yellow-500 text-xs font-medium">
-              <Star size={14} fill="currentColor" className="mr-0.5" />
-              <span className="text-gray-600">{product.ratingsAverage}</span>
+
+          {/*****/}
+          <div className="flex items-center gap-1 mb-3">
+            <div className="flex items-center text-yellow-400">
+              {[...Array(5)].map((_, i) => (
+                <Star 
+                  key={i} 
+                  size={12} 
+                  fill={i < Math.floor(product.ratingsAverage) ? "currentColor" : "none"} 
+                  className={i < Math.floor(product.ratingsAverage) ? "" : "text-gray-200"}
+                />
+              ))}
+            </div>
+            <span className="text-[10px] font-bold text-gray-400">({product.ratingsAverage})</span>
+          </div>
+
+          {/*****/}
+          <div className="mt-auto">
+            <div className="flex items-baseline gap-1 mb-4">
+               <span className="text-xs font-bold text-gray-400">EGP</span>
+               <span className="text-xl font-black text-gray-900">
+                 {product.price.toLocaleString()}
+               </span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={handleAddToCart}
+                className="flex-grow bg-[#1a1a1a] text-white py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-black transition-all text-xs font-bold active:scale-95 shadow-sm"
+              >
+                <ShoppingCart size={15} />
+                Add to Cart
+              </button>
+              
+              <button 
+                onClick={handleAddToWishlist}
+                className="p-3 border border-gray-100 rounded-xl text-gray-300 hover:text-red-500 hover:bg-red-50 hover:border-red-100 transition-all active:scale-90"
+              >
+                <Heart size={18} />
+              </button>
             </div>
           </div>
         </div>
       </Link>
-
-      {/* Add to Cart Button */}
-      <div className="p-3 pt-0">
-        {/* addToCart */}
-        <button 
-          onClick={() => productId && addToCart(productId)}
-          className="w-full bg-blue-600 text-white py-1.5 rounded text-sm font-medium flex items-center justify-center gap-2 hover:bg-blue-700 active:scale-95 transition-all"
-        >
-          <ShoppingCart size={16} />
-          <span>Add to Cart</span>
-        </button>
-      </div>
     </div>
   );
 }
